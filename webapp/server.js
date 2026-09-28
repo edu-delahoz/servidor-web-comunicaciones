@@ -12,6 +12,7 @@ const { csrfSync } = require('csrf-sync');
 
 const authRoutes = require('./routes/auth');
 const crudRoutes = require('./routes/clientes');
+const deployRoutes = require('./routes/deploys');
 
 const app = express();
 
@@ -131,6 +132,7 @@ app.get('/', (req, res) => {
 
 app.use('/', authRoutes);
 app.use('/clientes', crudRoutes);
+app.use('/deploys', deployRoutes);
 
 // Health check simple
 app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));

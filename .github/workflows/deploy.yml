@@ -10,6 +10,9 @@ jobs:
     # Corre en el runner instalado en la VM (no en la nube de GitHub)
     runs-on: self-hosted
     steps:
+      - name: Marcar inicio del despliegue
+        run: echo "DEPLOY_START=$(date +%s)" >> "$GITHUB_ENV"
+
       - name: Descargar el codigo del repo
         uses: actions/checkout@v4
 
@@ -17,7 +20,7 @@ jobs:
         run: |
           echo ">> Copiando archivos de la webapp a /root/webapp ..."
           # Copia el contenido de webapp/ sobre la carpeta viva.
-          # No toca .env ni db/ (no estan en el repo, se conservan).
+          # No toca .env, db/ ni deploy-data/ (no estan en el repo, se conservan).
           cp -R "$GITHUB_WORKSPACE/webapp/." /root/webapp/
           echo ">> Instalando dependencias ..."
           cd /root/webapp
@@ -26,3 +29,26 @@ jobs:
           systemctl restart webapp
           echo ">> Despliegue completado. Estado del servicio:"
           systemctl is-active webapp
+
+      - name: Registrar el despliegue para el dashboard /deploys
+        env:
+          GH_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Snapshot de ramas del repo (el dashboard las muestra)
+          BRANCHES_TMP=$(mktemp)
+          curl -s -H "Authorization: Bearer $GH_API_TOKEN" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/branches?per_page=100" \
+            -o "$BRANCHES_TMP" || true
+
+          DEPLOY_SHA="$GITHUB_SHA" \
+          DEPLOY_MESSAGE="$(git -C "$GITHUB_WORKSPACE" log -1 --pretty=%s)" \
+          DEPLOY_BRANCH="${GITHUB_REF_NAME}" \
+          DEPLOY_ACTOR="$GITHUB_ACTOR" \
+          DEPLOY_RUN_NUMBER="$GITHUB_RUN_NUMBER" \
+          DEPLOY_RUN_ID="$GITHUB_RUN_ID" \
+          DEPLOY_REPO="$GITHUB_REPOSITORY" \
+          DEPLOY_DURATION_SEC="$(( $(date +%s) - DEPLOY_START ))" \
+          BRANCHES_FILE="$BRANCHES_TMP" \
+          node /root/webapp/deploy/record-deploy.js
+
+          rm -f "$BRANCHES_TMP"
