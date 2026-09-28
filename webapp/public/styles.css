@@ -190,9 +190,13 @@ svg.icon {
   align-items: center;
   gap: 7px;
   margin: 0 6px 0 10px;
+  padding: 4px 12px 4px 5px;
+  border-radius: var(--radius-pill);
   color: var(--ink-secondary);
   font-size: 13.5px;
 }
+a.nav-user:hover { background: var(--fill-tertiary); color: var(--ink); text-decoration: none; }
+a.nav-user.is-active { background: var(--fill-secondary); color: var(--ink); }
 
 .nav-avatar {
   display: grid;
@@ -270,6 +274,26 @@ svg.icon {
 
 .auth-hero h1 { font-size: 30px; }
 .auth-hero p { margin: 8px 0 0; color: var(--ink-secondary); }
+
+.auth-alt {
+  margin: 18px 0 0;
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--ink-secondary);
+}
+
+/* Cabecera de la pagina Mi cuenta */
+.cuenta-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--hairline);
+}
+.cuenta-head h1 { font-size: 22px; }
+.cuenta-head .page-subtitle { margin-bottom: 0; font-size: 13.5px; }
+.cuenta-avatar { width: 44px; height: 44px; font-size: 16px; }
 
 /* ==========================================================================
    Formularios
@@ -376,6 +400,7 @@ input::placeholder, textarea::placeholder { color: var(--ink-tertiary); }
 }
 .alert svg.icon { margin-top: 2px; }
 .alert-error { background: var(--danger-tint); color: var(--danger); }
+.alert-ok { background: var(--success-tint); color: var(--success); }
 .alert ul { margin: 0; padding-left: 16px; }
 .alert li + li { margin-top: 2px; }
 
