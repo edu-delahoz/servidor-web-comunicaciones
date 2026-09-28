@@ -1,0 +1,55 @@
+<%- include('partials/header') %>
+
+<div class="auth-wrap">
+  <div class="auth-hero">
+    <span class="auth-glyph" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="10.5" cy="8" r="3.6"/>
+        <path d="M4 20c0-3.4 3-5.5 6.5-5.5S17 16.6 17 20"/>
+        <path d="M18.5 7v6M15.5 10h6"/>
+      </svg>
+    </span>
+    <h1>Crear cuenta</h1>
+    <p>Regístrese para administrar los clientes.</p>
+  </div>
+
+  <div class="card card-narrow">
+    <% if (errores && errores.length) { %>
+      <div class="alert alert-error" role="alert">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 8v4.5M12 15.8h.01"/>
+        </svg>
+        <ul>
+          <% errores.forEach(function(e) { %><li><%= e %></li><% }); %>
+        </ul>
+      </div>
+    <% } %>
+
+    <form method="POST" action="/registro" autocomplete="off">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <div class="field">
+        <label for="username">Usuario</label>
+        <input type="text" id="username" name="username" required maxlength="30" autofocus value="<%= valores.username || '' %>" placeholder="nombre.apellido">
+        <p class="field-hint">De 3 a 30 caracteres: letras, números, punto o guion.</p>
+      </div>
+
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" required maxlength="200" placeholder="Mínimo 8 caracteres">
+      </div>
+
+      <div class="field">
+        <label for="confirmar">Confirmar contraseña</label>
+        <input type="password" id="confirmar" name="confirmar" required maxlength="200" placeholder="Repita la contraseña">
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Crear cuenta</button>
+    </form>
+
+    <p class="auth-alt">¿Ya tiene cuenta? <a href="/login">Inicie sesión</a></p>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

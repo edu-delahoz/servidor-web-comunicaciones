@@ -13,6 +13,7 @@ const { csrfSync } = require('csrf-sync');
 const authRoutes = require('./routes/auth');
 const crudRoutes = require('./routes/clientes');
 const deployRoutes = require('./routes/deploys');
+const cuentaRoutes = require('./routes/cuenta');
 
 const app = express();
 
@@ -108,7 +109,8 @@ app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   // Seccion activa para resaltar el enlace correspondiente en la barra de navegacion
   res.locals.active = req.path.startsWith('/clientes') ? 'clientes'
-    : req.path.startsWith('/deploys') ? 'deploys' : null;
+    : req.path.startsWith('/deploys') ? 'deploys'
+    : req.path.startsWith('/cuenta') ? 'cuenta' : null;
   next();
 });
 app.use(csrfSynchronisedProtection);
@@ -133,6 +135,7 @@ app.get('/', (req, res) => {
 app.use('/', authRoutes);
 app.use('/clientes', crudRoutes);
 app.use('/deploys', deployRoutes);
+app.use('/cuenta', cuentaRoutes);
 
 // Health check simple
 app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
