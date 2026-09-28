@@ -1,0 +1,25 @@
+{
+  "name": "servidor-web-entrega1",
+  "version": "1.0.0",
+  "description": "Servidor Web con login y CRUD sobre SQLite - Entrega Montajes Practicos Parte I",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "init-db": "node db/init.js"
+  },
+  "engines": {
+    "node": ">=22.5"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "csrf-sync": "^4.0.3",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "express-session": "^1.18.0",
+    "helmet": "^8.0.0",
+    "memorystore": "^1.6.7"
+  }
+}

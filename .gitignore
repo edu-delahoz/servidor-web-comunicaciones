@@ -1,0 +1,29 @@
+# Dependencias
+node_modules/
+
+# Configuracion con secretos (NUNCA subir)
+.env
+*.env
+!.env.example
+
+# Base de datos local y sesiones
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+*.log
+npm-debug.log
+
+# Reportes intermedios de ZAP (se conservan los finales en evidencias/)
+**/zap.yaml
+
+# Sistema
+.DS_Store
+
+# Credenciales de VPN de la U (NUNCA subir)
+OpenVPN-Tele-2026/
+OpenVPN-Tele-2026.zip
+*.key
+*.ovpn
+*.crt

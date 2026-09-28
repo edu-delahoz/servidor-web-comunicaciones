@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+
+<div class="card card-narrow">
+  <h1>Iniciar sesion</h1>
+
+  <% if (error) { %>
+    <div class="alert alert-error"><%= error %></div>
+  <% } %>
+
+  <form method="POST" action="/login" autocomplete="off">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+    <label for="username">Usuario</label>
+    <input type="text" id="username" name="username" required maxlength="100" autofocus>
+
+    <label for="password">Contrasena</label>
+    <input type="password" id="password" name="password" required maxlength="200">
+
+    <button type="submit" class="btn btn-primary">Entrar</button>
+  </form>
+</div>
+
+<%- include('partials/footer') %>

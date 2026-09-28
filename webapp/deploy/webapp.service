@@ -1,0 +1,23 @@
+[Unit]
+Description=Servidor Web Entrega I (Node.js + SQLite)
+After=network.target
+
+[Service]
+Type=simple
+User=webapp
+Group=webapp
+WorkingDirectory=/opt/webapp
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=5
+
+# Endurecimiento del servicio
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/webapp/db
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+
+<div class="card card-narrow">
+  <h1><%= title %></h1>
+
+  <% if (errores && errores.length) { %>
+    <div class="alert alert-error">
+      <ul>
+        <% errores.forEach(function(e) { %><li><%= e %></li><% }); %>
+      </ul>
+    </div>
+  <% } %>
+
+  <form method="POST" action="<%= accion %>">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+    <label for="nombre">Nombre *</label>
+    <input type="text" id="nombre" name="nombre" required maxlength="100" value="<%= cliente.nombre || '' %>">
+
+    <label for="email">Email *</label>
+    <input type="email" id="email" name="email" required maxlength="150" value="<%= cliente.email || '' %>">
+
+    <label for="telefono">Telefono</label>
+    <input type="text" id="telefono" name="telefono" maxlength="20" value="<%= cliente.telefono || '' %>">
+
+    <label for="notas">Notas</label>
+    <textarea id="notas" name="notas" maxlength="500" rows="3"><%= cliente.notas || '' %></textarea>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <a href="/clientes" class="btn">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

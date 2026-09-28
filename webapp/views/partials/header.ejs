@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Servidor Web Entrega I</title>
+  <link rel="stylesheet" href="/public/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <span class="brand">Servidor Web &mdash; Entrega I</span>
+    <% if (user) { %>
+      <nav>
+        <a href="/clientes">Clientes</a>
+        <span class="user">Usuario: <strong><%= user.username %></strong></span>
+        <form method="POST" action="/logout" class="inline">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <button type="submit" class="btn btn-small">Salir</button>
+        </form>
+      </nav>
+    <% } %>
+  </header>
+  <main class="container">
