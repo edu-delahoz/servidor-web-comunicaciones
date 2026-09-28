@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <title><%= title %> — Servidor Web · Entrega I</title>
-  <link rel="stylesheet" href="/public/styles.css">
+  <link rel="stylesheet" href="/public/styles.css?v=2">
 </head>
 <body>
   <header class="topbar">
@@ -28,6 +28,12 @@
             <path d="M16 8.5a3 3 0 0 1 0 5.6M17.5 14.8c1.8.7 3 2.2 3 4.2"/>
           </svg>
           Clientes
+        </a>
+        <a class="nav-link<%= (typeof active !== 'undefined' && active === 'deploys') ? ' is-active' : '' %>" href="/deploys">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3 3 19h18z"/>
+          </svg>
+          Deploys
         </a>
         <span class="nav-user">
           <span class="nav-avatar" aria-hidden="true"><%= user.username.slice(0, 2) %></span>

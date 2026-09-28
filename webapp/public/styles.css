@@ -523,6 +523,181 @@ dialog.confirm .dialog-actions { display: flex; gap: 8px; }
 dialog.confirm .dialog-actions .btn { flex: 1; }
 
 /* ==========================================================================
+   Dashboard de deploys (tipo Vercel)
+   ========================================================================== */
+
+.mono, .chip-mono {
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.92em;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+}
+.status-ok { background: var(--success-tint); color: var(--success); }
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  flex: none;
+  animation: pulse 2.2s ease-in-out infinite;
+}
+.status-dot-static { animation: none; margin-top: 6px; }
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--success-tint); }
+  50% { box-shadow: 0 0 0 5px var(--success-tint); }
+}
+
+.deploy-hero { margin-bottom: 18px; }
+
+.deploy-hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.deploy-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-tertiary);
+}
+
+.deploy-run-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.deploy-message {
+  margin: 0 0 16px;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.deploy-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: var(--radius-pill);
+  background: var(--fill-tertiary);
+  border: 1px solid var(--hairline);
+  color: var(--ink-secondary);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+.chip-prod { background: var(--accent-tint); border-color: transparent; color: var(--accent); font-weight: 600; }
+
+.deploy-time { margin-left: 4px; color: var(--ink-tertiary); font-size: 13px; }
+
+.deploy-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.deploy-side { display: grid; gap: 18px; }
+
+.section-title {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.section-note {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ink-tertiary);
+  margin-left: 6px;
+}
+
+.deploy-list { list-style: none; margin: 0; padding: 0; }
+
+.deploy-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 2px;
+  border-bottom: 1px solid var(--hairline);
+}
+.deploy-item:last-child { border-bottom: none; padding-bottom: 4px; }
+.deploy-item-body { flex: 1; min-width: 0; }
+.deploy-item-msg {
+  margin: 0 0 3px;
+  font-size: 14px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.deploy-item-meta { margin: 0; font-size: 12.5px; color: var(--ink-tertiary); }
+.deploy-item-run { color: var(--ink-tertiary); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+
+.branch-list { list-style: none; margin: 0; padding: 0; }
+.branch-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 2px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 13.5px;
+}
+.branch-item:last-child { border-bottom: none; }
+.branch-item svg.icon { color: var(--ink-tertiary); }
+.branch-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.branch-sha { color: var(--ink-tertiary); }
+
+.kv-list { margin: 0; }
+.kv {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 2px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 13.5px;
+}
+.kv:last-child { border-bottom: none; }
+.kv dt { color: var(--ink-secondary); }
+.kv dd { margin: 0; font-weight: 500; text-align: right; }
+
+@media (max-width: 760px) {
+  .deploy-grid { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
    Pie de página
    ========================================================================== */
 
