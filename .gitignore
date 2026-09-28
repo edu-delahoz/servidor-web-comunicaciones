@@ -27,3 +27,6 @@ OpenVPN-Tele-2026.zip
 *.key
 *.ovpn
 *.crt
+
+# Evidencias con datos sensibles (NUNCA subir)
+*SENSIBLE-NO-SUBIR*
