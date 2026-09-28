@@ -105,6 +105,9 @@ const { csrfSynchronisedProtection, generateToken } = csrfSync({
 app.use((req, res, next) => {
   res.locals.csrfToken = generateToken(req);
   res.locals.user = req.session.user || null;
+  // Seccion activa para resaltar el enlace correspondiente en la barra de navegacion
+  res.locals.active = req.path.startsWith('/clientes') ? 'clientes'
+    : req.path.startsWith('/deploys') ? 'deploys' : null;
   next();
 });
 app.use(csrfSynchronisedProtection);

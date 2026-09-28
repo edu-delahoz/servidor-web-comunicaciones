@@ -1,23 +1,45 @@
 <%- include('partials/header') %>
 
-<div class="card card-narrow">
-  <h1>Iniciar sesion</h1>
+<div class="auth-wrap">
+  <div class="auth-hero">
+    <span class="auth-glyph" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="10.5" width="14" height="9.5" rx="2.5"/>
+        <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/>
+        <circle cx="12" cy="15.2" r="1.3" fill="currentColor" stroke="none"/>
+      </svg>
+    </span>
+    <h1>Iniciar sesión</h1>
+    <p>Acceda al panel de administración de clientes.</p>
+  </div>
 
-  <% if (error) { %>
-    <div class="alert alert-error"><%= error %></div>
-  <% } %>
+  <div class="card card-narrow">
+    <% if (error) { %>
+      <div class="alert alert-error" role="alert">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 8v4.5M12 15.8h.01"/>
+        </svg>
+        <span><%= error %></span>
+      </div>
+    <% } %>
 
-  <form method="POST" action="/login" autocomplete="off">
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <form method="POST" action="/login" autocomplete="off">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-    <label for="username">Usuario</label>
-    <input type="text" id="username" name="username" required maxlength="100" autofocus>
+      <div class="field">
+        <label for="username">Usuario</label>
+        <input type="text" id="username" name="username" required maxlength="100" autofocus placeholder="admin">
+      </div>
 
-    <label for="password">Contrasena</label>
-    <input type="password" id="password" name="password" required maxlength="200">
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" required maxlength="200" placeholder="••••••••">
+      </div>
 
-    <button type="submit" class="btn btn-primary">Entrar</button>
-  </form>
+      <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+    </form>
+  </div>
 </div>
 
 <%- include('partials/footer') %>
