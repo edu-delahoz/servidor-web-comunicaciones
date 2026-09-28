@@ -33,6 +33,14 @@ function tiempoRelativo(iso) {
   return `hace ${Math.floor(seg / 86400)} d`;
 }
 
+// "28 sep" — estilo de fecha corta que usa Vercel en "Created"
+function fechaCorta(iso) {
+  if (!iso) return '';
+  const f = new Date(iso);
+  const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  return `${f.getDate()} ${meses[f.getMonth()]}`;
+}
+
 function formatoUptime(segundos) {
   const d = Math.floor(segundos / 86400);
   const h = Math.floor((segundos % 86400) / 3600);
@@ -46,11 +54,14 @@ router.get('/', (req, res) => {
   const historial = leerJson('history.json', []);
   const ramasInfo = leerJson('branches.json', { fetchedAt: null, branches: [] });
   const actual = historial[0] || null;
+  const anterior = historial[1] || null;
 
   res.render('deploys', {
     title: 'Deploys',
     actual,
-    historial: historial.slice(1),
+    anterior,
+    historial,
+    host: req.get('host'),
     ramas: ramasInfo.branches,
     ramasFecha: tiempoRelativo(ramasInfo.fetchedAt),
     servidor: {
@@ -59,7 +70,8 @@ router.get('/', (req, res) => {
       host: os.hostname(),
       uptime: formatoUptime(process.uptime())
     },
-    tiempoRelativo
+    tiempoRelativo,
+    fechaCorta
   });
 });
 

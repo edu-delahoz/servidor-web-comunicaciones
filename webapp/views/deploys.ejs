@@ -1,19 +1,10 @@
 <%- include('partials/header') %>
 
-<div class="page-head">
-  <div>
-    <h1>Deploys</h1>
-    <p class="page-subtitle">Despliegue continuo desde GitHub Actions al servidor AlmaLinux.</p>
-  </div>
-  <span class="status-pill status-ok">
-    <span class="status-dot"></span>
-    Producción activa
-  </span>
-</div>
+<div class="vc">
 
 <% if (!actual) { %>
-  <div class="card empty-state">
-    <span class="empty-glyph" aria-hidden="true">
+  <div class="vc-card vc-empty">
+    <span class="vc-empty-glyph" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 3v10M12 13l-3.5-3.5M12 13l3.5-3.5"/>
         <path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>
@@ -24,105 +15,238 @@
   </div>
 <% } else { %>
 
-  <div class="card deploy-hero">
-    <div class="deploy-hero-top">
-      <span class="deploy-label">Despliegue actual</span>
-      <% if (actual.repo && actual.runId) { %>
-        <a class="deploy-run-link" href="https://github.com/<%= actual.repo %>/actions/runs/<%= actual.runId %>" rel="noopener">
-          Run #<%= actual.runNumber %>
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M9 15 19 5M19 5h-6M19 5v6"/>
-          </svg>
+  <section class="vc-card vc-production">
+
+    <!-- Cabecera: título + acciones (GitHub · Rollback · Visitar · más) -->
+    <header class="vc-prod-head">
+      <h1 class="vc-prod-title">Despliegue de Producción</h1>
+      <div class="vc-prod-actions">
+        <% if (actual.repo) { %>
+          <a class="vc-btn vc-btn-square" href="https://github.com/<%= actual.repo %>" rel="noopener" title="Ver repositorio en GitHub" aria-label="Repositorio en GitHub">
+            <svg class="vc-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.72.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.72-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.57 2.34 1.12 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05a9.36 9.36 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.8-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.25 10.25 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/>
+            </svg>
+          </a>
+        <% } %>
+        <% if (anterior && anterior.repo && anterior.runId) { %>
+          <a class="vc-btn" href="https://github.com/<%= anterior.repo %>/actions/runs/<%= anterior.runId %>" rel="noopener" title="Ver el despliegue anterior">
+            <svg class="vc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>
+            </svg>
+            Rollback Instantáneo
+          </a>
+        <% } else { %>
+          <span class="vc-btn vc-btn-disabled" title="No hay un despliegue anterior al cual volver">
+            <svg class="vc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>
+            </svg>
+            Rollback Instantáneo
+          </span>
+        <% } %>
+        <a class="vc-visit" href="/">
+          <span class="vc-visit-label">Visitar</span>
+          <span class="vc-visit-chev" aria-hidden="true">
+            <svg class="vc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </span>
         </a>
-      <% } %>
+        <span class="vc-btn vc-btn-square vc-btn-disabled" aria-hidden="true">
+          <svg class="vc-icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>
+        </span>
+      </div>
+    </header>
+
+    <!-- Cuerpo: captura del sitio + detalles del despliegue -->
+    <div class="vc-prod-body">
+
+      <a class="vc-shot" href="/" aria-label="Abrir el sitio en producción">
+        <span class="vc-shot-bar" aria-hidden="true">
+          <span class="vc-shot-dot"></span><span class="vc-shot-dot"></span><span class="vc-shot-dot"></span>
+          <span class="vc-shot-url"><%= host %></span>
+        </span>
+        <span class="vc-shot-page" aria-hidden="true">
+          <span class="vc-shot-nav">
+            <span class="vc-shot-brand"></span>
+            <span class="vc-shot-pill"></span>
+            <span class="vc-shot-pill"></span>
+            <span class="vc-shot-avatar"></span>
+          </span>
+          <span class="vc-shot-headline">
+            <span class="vc-shot-h1"></span>
+            <span class="vc-shot-cta"></span>
+          </span>
+          <span class="vc-shot-table">
+            <span class="vc-shot-thead"></span>
+            <span class="vc-shot-row"><span class="vc-shot-ava"></span><span class="vc-shot-line"></span><span class="vc-shot-line vc-shot-line-2"></span></span>
+            <span class="vc-shot-row"><span class="vc-shot-ava"></span><span class="vc-shot-line"></span><span class="vc-shot-line vc-shot-line-2"></span></span>
+            <span class="vc-shot-row"><span class="vc-shot-ava"></span><span class="vc-shot-line"></span><span class="vc-shot-line vc-shot-line-2"></span></span>
+            <span class="vc-shot-row"><span class="vc-shot-ava"></span><span class="vc-shot-line"></span><span class="vc-shot-line vc-shot-line-2"></span></span>
+          </span>
+        </span>
+      </a>
+
+      <div class="vc-details">
+        <div class="vc-field">
+          <span class="vc-label">Deployment</span>
+          <span class="vc-value vc-strong"><%= host %></span>
+        </div>
+
+        <div class="vc-field">
+          <span class="vc-label">
+            Dominios
+            <svg class="vc-icon vc-icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"/><path d="M12 8.5v7M8.5 12h7"/>
+            </svg>
+          </span>
+          <a class="vc-domain" href="/">
+            <%= host %>
+            <svg class="vc-icon vc-icon-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 15 19 5M19 5h-6M19 5v6"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="vc-cols">
+          <div class="vc-field">
+            <span class="vc-label">Estado</span>
+            <span class="vc-status">
+              <span class="vc-dot" aria-hidden="true"></span>
+              Ready
+            </span>
+          </div>
+          <div class="vc-field">
+            <span class="vc-label">Creado</span>
+            <span class="vc-value"><%= fechaCorta(actual.timestamp) %> por <%= actual.actor %></span>
+          </div>
+        </div>
+
+        <div class="vc-field">
+          <span class="vc-label">Source</span>
+          <span class="vc-source">
+            <svg class="vc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="6" cy="5" r="2.3"/><circle cx="6" cy="19" r="2.3"/><circle cx="18" cy="8" r="2.3"/>
+              <path d="M6 7.3v9.4M18 10.3c0 3.2-2.6 4.2-5.5 4.2H10"/>
+            </svg>
+            <span class="vc-strong"><%= actual.branch %></span>
+          </span>
+          <span class="vc-source">
+            <svg class="vc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v6.3M12 15.2v6.3"/>
+            </svg>
+            <span class="vc-mono"><%= actual.shortSha %></span>
+            <% if (actual.repo) { %>
+              <a class="vc-commit-msg" href="https://github.com/<%= actual.repo %>/commit/<%= actual.sha %>" rel="noopener"><%= actual.message %></a>
+            <% } else { %>
+              <span class="vc-commit-msg"><%= actual.message %></span>
+            <% } %>
+          </span>
+        </div>
+      </div>
     </div>
 
-    <p class="deploy-message"><%= actual.message %></p>
+    <!-- Fila plegable de configuración -->
+    <details class="vc-settings">
+      <summary>
+        <svg class="vc-icon vc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 6l6 6-6 6"/>
+        </svg>
+        Configuración del Despliegue
+        <% if (actual.durationSec) { %><span class="vc-badge">desplegado en <%= actual.durationSec %> s</span><% } %>
+      </summary>
+      <dl class="vc-kv">
+        <div class="vc-kv-row"><dt>Servicio</dt><dd class="vc-mono">webapp.service (systemd)</dd></div>
+        <div class="vc-kv-row"><dt>Proxy inverso</dt><dd class="vc-mono">nginx</dd></div>
+        <div class="vc-kv-row"><dt>Pipeline</dt><dd>GitHub Actions · push a <span class="vc-mono">main</span></dd></div>
+        <div class="vc-kv-row"><dt>Health check</dt><dd class="vc-mono">GET /health</dd></div>
+      </dl>
+    </details>
 
-    <div class="deploy-meta">
-      <span class="chip chip-mono" title="Commit desplegado">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="3.2"/>
-          <path d="M12 2.5v6.3M12 15.2v6.3"/>
+    <!-- Barra inferior: instrucción de actualización -->
+    <footer class="vc-prod-foot">
+      <p>Para actualizar tu Despliegue de Producción, haz push a la rama <span class="vc-mono">main</span>.</p>
+      <a class="vc-btn" href="#deployments">
+        <svg class="vc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M7 12h13M10 17h10"/>
         </svg>
-        <%= actual.shortSha %>
-      </span>
-      <span class="chip" title="Rama de origen">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="6" cy="5" r="2.3"/><circle cx="6" cy="19" r="2.3"/><circle cx="18" cy="8" r="2.3"/>
-          <path d="M6 7.3v9.4M18 10.3c0 3.2-2.6 4.2-5.5 4.2H10"/>
-        </svg>
-        <%= actual.branch %>
-      </span>
-      <span class="chip" title="Autor del push">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="8" r="3.4"/><path d="M5.5 19.5c0-3.2 3-5 6.5-5s6.5 1.8 6.5 5"/>
-        </svg>
-        <%= actual.actor %>
-      </span>
-      <span class="deploy-time"><%= tiempoRelativo(actual.timestamp) %><% if (actual.durationSec) { %> · desplegado en <%= actual.durationSec %> s<% } %></span>
-    </div>
-  </div>
+        Deployments
+      </a>
+    </footer>
+  </section>
 
-  <div class="deploy-grid">
-    <section class="card deploy-history">
-      <h2 class="section-title">Historial</h2>
-      <% if (!historial.length) { %>
-        <p class="cell-muted">Este es el primer despliegue registrado.</p>
+  <!-- Fila inferior de tarjetas -->
+  <div class="vc-grid">
+
+    <section class="vc-card vc-panel" id="deployments">
+      <header class="vc-panel-head">
+        <h2>Deployments</h2>
+        <span class="vc-panel-note"><%= historial.length %> en total</span>
+      </header>
+      <ul class="vc-list">
+        <% historial.forEach(function(d, i) { %>
+          <li class="vc-deploy-row">
+            <span class="vc-dot" aria-hidden="true"></span>
+            <div class="vc-deploy-body">
+              <p class="vc-deploy-msg"><%= d.message %></p>
+              <p class="vc-deploy-meta">
+                <span class="vc-mono"><%= d.shortSha %></span>
+                · <%= d.branch %>
+                · <%= tiempoRelativo(d.timestamp) %>
+              </p>
+            </div>
+            <% if (i === 0) { %>
+              <span class="vc-badge vc-badge-current">Actual</span>
+            <% } else if (d.runNumber) { %>
+              <span class="vc-deploy-run">#<%= d.runNumber %></span>
+            <% } %>
+          </li>
+        <% }); %>
+      </ul>
+    </section>
+
+    <section class="vc-card vc-panel">
+      <header class="vc-panel-head">
+        <h2>Ramas</h2>
+        <% if (ramasFecha) { %><span class="vc-panel-note">actualizado <%= ramasFecha %></span><% } %>
+      </header>
+      <% if (!ramas.length) { %>
+        <p class="vc-muted">Sin datos todavía.</p>
       <% } else { %>
-        <ul class="deploy-list">
-          <% historial.forEach(function(d) { %>
-            <li class="deploy-item">
-              <span class="status-dot status-dot-static" aria-hidden="true"></span>
-              <div class="deploy-item-body">
-                <p class="deploy-item-msg"><%= d.message %></p>
-                <p class="deploy-item-meta">
-                  <span class="mono"><%= d.shortSha %></span>
-                  · <%= d.branch %>
-                  · <%= tiempoRelativo(d.timestamp) %><% if (d.durationSec) { %> · <%= d.durationSec %> s<% } %>
-                </p>
-              </div>
-              <% if (d.runNumber) { %><span class="deploy-item-run">#<%= d.runNumber %></span><% } %>
+        <ul class="vc-list">
+          <% ramas.forEach(function(r) { %>
+            <li class="vc-branch-row">
+              <svg class="vc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="6" cy="5" r="2.3"/><circle cx="6" cy="19" r="2.3"/><circle cx="18" cy="8" r="2.3"/>
+                <path d="M6 7.3v9.4M18 10.3c0 3.2-2.6 4.2-5.5 4.2H10"/>
+              </svg>
+              <span class="vc-branch-name"><%= r.name %></span>
+              <span class="vc-mono vc-branch-sha"><%= r.sha %></span>
+              <% if (actual && r.name === actual.branch) { %><span class="vc-badge vc-badge-prod">Production</span><% } %>
             </li>
           <% }); %>
         </ul>
       <% } %>
     </section>
 
-    <div class="deploy-side">
-      <section class="card">
-        <h2 class="section-title">Ramas<% if (ramasFecha) { %> <span class="section-note">actualizado <%= ramasFecha %></span><% } %></h2>
-        <% if (!ramas.length) { %>
-          <p class="cell-muted">Sin datos todavía.</p>
-        <% } else { %>
-          <ul class="branch-list">
-            <% ramas.forEach(function(r) { %>
-              <li class="branch-item">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <circle cx="6" cy="5" r="2.3"/><circle cx="6" cy="19" r="2.3"/><circle cx="18" cy="8" r="2.3"/>
-                  <path d="M6 7.3v9.4M18 10.3c0 3.2-2.6 4.2-5.5 4.2H10"/>
-                </svg>
-                <span class="branch-name"><%= r.name %></span>
-                <span class="mono branch-sha"><%= r.sha %></span>
-                <% if (actual && r.name === actual.branch) { %><span class="chip chip-prod">Prod</span><% } %>
-              </li>
-            <% }); %>
-          </ul>
-        <% } %>
-      </section>
-
-      <section class="card">
-        <h2 class="section-title">Servidor</h2>
-        <dl class="kv-list">
-          <div class="kv"><dt>Uptime del proceso</dt><dd><%= servidor.uptime %></dd></div>
-          <div class="kv"><dt>Node.js</dt><dd class="mono"><%= servidor.node %></dd></div>
-          <div class="kv"><dt>Sistema</dt><dd><%= servidor.plataforma %></dd></div>
-          <div class="kv"><dt>Host</dt><dd class="mono"><%= servidor.host %></dd></div>
-        </dl>
-      </section>
-    </div>
+    <section class="vc-card vc-panel">
+      <header class="vc-panel-head">
+        <h2>Servidor</h2>
+        <span class="vc-status vc-status-small">
+          <span class="vc-dot" aria-hidden="true"></span>
+          Online
+        </span>
+      </header>
+      <dl class="vc-kv">
+        <div class="vc-kv-row"><dt>Uptime del proceso</dt><dd><%= servidor.uptime %></dd></div>
+        <div class="vc-kv-row"><dt>Node.js</dt><dd class="vc-mono"><%= servidor.node %></dd></div>
+        <div class="vc-kv-row"><dt>Sistema</dt><dd><%= servidor.plataforma %></dd></div>
+        <div class="vc-kv-row"><dt>Host</dt><dd class="vc-mono"><%= servidor.host %></dd></div>
+      </dl>
+    </section>
   </div>
 
 <% } %>
+
+</div>
 
 <%- include('partials/footer') %>
