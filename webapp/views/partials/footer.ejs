@@ -1,6 +1,20 @@
   </main>
   <footer class="footer">
-    <small>Montajes Practicos &mdash; Parte I &middot; AlmaLinux + Node.js + SQLite &middot; Auto-deploy activo</small>
+    Montajes Prácticos — Parte I
+    <span class="sep">·</span> AlmaLinux
+    <span class="sep">·</span> Node.js
+    <span class="sep">·</span> SQLite
   </footer>
+
+  <dialog class="confirm" id="confirm-dialog">
+    <h2>¿Está seguro?</h2>
+    <p></p>
+    <div class="dialog-actions">
+      <button type="button" class="btn" data-action="cancel">Cancelar</button>
+      <button type="button" class="btn btn-danger" data-action="accept">Eliminar</button>
+    </div>
+  </dialog>
+
+  <script src="/public/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,128 @@
+<%- include('partials/header') %>
+
+<div class="page-head">
+  <div>
+    <h1>Deploys</h1>
+    <p class="page-subtitle">Despliegue continuo desde GitHub Actions al servidor AlmaLinux.</p>
+  </div>
+  <span class="status-pill status-ok">
+    <span class="status-dot"></span>
+    Producción activa
+  </span>
+</div>
+
+<% if (!actual) { %>
+  <div class="card empty-state">
+    <span class="empty-glyph" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v10M12 13l-3.5-3.5M12 13l3.5-3.5"/>
+        <path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>
+      </svg>
+    </span>
+    <h2>Aún no hay despliegues registrados</h2>
+    <p>El próximo push a <code>main</code> aparecerá aquí automáticamente.</p>
+  </div>
+<% } else { %>
+
+  <div class="card deploy-hero">
+    <div class="deploy-hero-top">
+      <span class="deploy-label">Despliegue actual</span>
+      <% if (actual.repo && actual.runId) { %>
+        <a class="deploy-run-link" href="https://github.com/<%= actual.repo %>/actions/runs/<%= actual.runId %>" rel="noopener">
+          Run #<%= actual.runNumber %>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 15 19 5M19 5h-6M19 5v6"/>
+          </svg>
+        </a>
+      <% } %>
+    </div>
+
+    <p class="deploy-message"><%= actual.message %></p>
+
+    <div class="deploy-meta">
+      <span class="chip chip-mono" title="Commit desplegado">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.2"/>
+          <path d="M12 2.5v6.3M12 15.2v6.3"/>
+        </svg>
+        <%= actual.shortSha %>
+      </span>
+      <span class="chip" title="Rama de origen">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="6" cy="5" r="2.3"/><circle cx="6" cy="19" r="2.3"/><circle cx="18" cy="8" r="2.3"/>
+          <path d="M6 7.3v9.4M18 10.3c0 3.2-2.6 4.2-5.5 4.2H10"/>
+        </svg>
+        <%= actual.branch %>
+      </span>
+      <span class="chip" title="Autor del push">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="8" r="3.4"/><path d="M5.5 19.5c0-3.2 3-5 6.5-5s6.5 1.8 6.5 5"/>
+        </svg>
+        <%= actual.actor %>
+      </span>
+      <span class="deploy-time"><%= tiempoRelativo(actual.timestamp) %><% if (actual.durationSec) { %> · desplegado en <%= actual.durationSec %> s<% } %></span>
+    </div>
+  </div>
+
+  <div class="deploy-grid">
+    <section class="card deploy-history">
+      <h2 class="section-title">Historial</h2>
+      <% if (!historial.length) { %>
+        <p class="cell-muted">Este es el primer despliegue registrado.</p>
+      <% } else { %>
+        <ul class="deploy-list">
+          <% historial.forEach(function(d) { %>
+            <li class="deploy-item">
+              <span class="status-dot status-dot-static" aria-hidden="true"></span>
+              <div class="deploy-item-body">
+                <p class="deploy-item-msg"><%= d.message %></p>
+                <p class="deploy-item-meta">
+                  <span class="mono"><%= d.shortSha %></span>
+                  · <%= d.branch %>
+                  · <%= tiempoRelativo(d.timestamp) %><% if (d.durationSec) { %> · <%= d.durationSec %> s<% } %>
+                </p>
+              </div>
+              <% if (d.runNumber) { %><span class="deploy-item-run">#<%= d.runNumber %></span><% } %>
+            </li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </section>
+
+    <div class="deploy-side">
+      <section class="card">
+        <h2 class="section-title">Ramas<% if (ramasFecha) { %> <span class="section-note">actualizado <%= ramasFecha %></span><% } %></h2>
+        <% if (!ramas.length) { %>
+          <p class="cell-muted">Sin datos todavía.</p>
+        <% } else { %>
+          <ul class="branch-list">
+            <% ramas.forEach(function(r) { %>
+              <li class="branch-item">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="6" cy="5" r="2.3"/><circle cx="6" cy="19" r="2.3"/><circle cx="18" cy="8" r="2.3"/>
+                  <path d="M6 7.3v9.4M18 10.3c0 3.2-2.6 4.2-5.5 4.2H10"/>
+                </svg>
+                <span class="branch-name"><%= r.name %></span>
+                <span class="mono branch-sha"><%= r.sha %></span>
+                <% if (actual && r.name === actual.branch) { %><span class="chip chip-prod">Prod</span><% } %>
+              </li>
+            <% }); %>
+          </ul>
+        <% } %>
+      </section>
+
+      <section class="card">
+        <h2 class="section-title">Servidor</h2>
+        <dl class="kv-list">
+          <div class="kv"><dt>Uptime del proceso</dt><dd><%= servidor.uptime %></dd></div>
+          <div class="kv"><dt>Node.js</dt><dd class="mono"><%= servidor.node %></dd></div>
+          <div class="kv"><dt>Sistema</dt><dd><%= servidor.plataforma %></dd></div>
+          <div class="kv"><dt>Host</dt><dd class="mono"><%= servidor.host %></dd></div>
+        </dl>
+      </section>
+    </div>
+  </div>
+
+<% } %>
+
+<%- include('partials/footer') %>
