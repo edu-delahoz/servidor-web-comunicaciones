@@ -1,0 +1,28 @@
+name: Deploy a la VM (push-to-deploy)
+
+# Se ejecuta automaticamente en cada push a la rama main
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    # Corre en el runner instalado en la VM (no en la nube de GitHub)
+    runs-on: self-hosted
+    steps:
+      - name: Descargar el codigo del repo
+        uses: actions/checkout@v4
+
+      - name: Desplegar la webapp y reiniciar el servicio
+        run: |
+          echo ">> Copiando archivos de la webapp a /root/webapp ..."
+          # Copia el contenido de webapp/ sobre la carpeta viva.
+          # No toca .env ni db/ (no estan en el repo, se conservan).
+          cp -R "$GITHUB_WORKSPACE/webapp/." /root/webapp/
+          echo ">> Instalando dependencias ..."
+          cd /root/webapp
+          npm install --omit=dev
+          echo ">> Reiniciando el servicio webapp ..."
+          systemctl restart webapp
+          echo ">> Despliegue completado. Estado del servicio:"
+          systemctl is-active webapp
