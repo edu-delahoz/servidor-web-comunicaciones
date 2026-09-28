@@ -2,9 +2,14 @@
 
 <div class="card card-narrow">
   <h1><%= title %></h1>
+  <p class="page-subtitle"><%= cliente.id ? 'Modifique los datos y guarde los cambios.' : 'Complete los datos del nuevo cliente.' %></p>
 
   <% if (errores && errores.length) { %>
-    <div class="alert alert-error">
+    <div class="alert alert-error" role="alert">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M12 8v4.5M12 15.8h.01"/>
+      </svg>
       <ul>
         <% errores.forEach(function(e) { %><li><%= e %></li><% }); %>
       </ul>
@@ -14,17 +19,26 @@
   <form method="POST" action="<%= accion %>">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-    <label for="nombre">Nombre *</label>
-    <input type="text" id="nombre" name="nombre" required maxlength="100" value="<%= cliente.nombre || '' %>">
+    <div class="field">
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" name="nombre" required maxlength="100" value="<%= cliente.nombre || '' %>" placeholder="Nombre completo">
+    </div>
 
-    <label for="email">Email *</label>
-    <input type="email" id="email" name="email" required maxlength="150" value="<%= cliente.email || '' %>">
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required maxlength="150" value="<%= cliente.email || '' %>" placeholder="nombre@ejemplo.com">
+    </div>
 
-    <label for="telefono">Telefono</label>
-    <input type="text" id="telefono" name="telefono" maxlength="20" value="<%= cliente.telefono || '' %>">
+    <div class="field">
+      <label for="telefono">Teléfono</label>
+      <input type="text" id="telefono" name="telefono" maxlength="20" value="<%= cliente.telefono || '' %>" placeholder="+57 300 000 0000">
+      <p class="field-hint">Opcional.</p>
+    </div>
 
-    <label for="notas">Notas</label>
-    <textarea id="notas" name="notas" maxlength="500" rows="3"><%= cliente.notas || '' %></textarea>
+    <div class="field">
+      <label for="notas">Notas</label>
+      <textarea id="notas" name="notas" maxlength="500" rows="3" placeholder="Notas internas (opcional)"><%= cliente.notas || '' %></textarea>
+    </div>
 
     <div class="form-actions">
       <button type="submit" class="btn btn-primary">Guardar</button>
